@@ -1,96 +1,37 @@
 workflow: GitFlow/v1
-# strategies:
-  # - Fallback
-  # - Mainline
-  # - TaggedCommit
-  # - VersionInBranchName
-  # - MergeMessage
-  # - TrackReleaseBranches
-branches:
-  main:
-    is-release-branch: true
-    source-branches: ['rc', 'develop']
-    tracks-release-branches: false
 
+branches:
   develop:
-    label: develop
+    label: 'develop'
+    increment: Minor
     prevent-increment:
       of-merged-branch: true
-    regex: ^dev(elop)?(ment)?$
-    source-branches: []
-    is-source-branch-for: ['main', 'rc']
     tracks-release-branches: false
 
   release:
     regex: ^$ # match nothing
 
-  feature:
-    regex: ^$ # match nothing
-
-  unknown:
-    mode: ContinuousDelivery
-    label: 'dev'
-    increment: Inherit
-    prevent-increment:
-      when-current-commit-tagged: false
-    track-merge-message: true
-    regex: (?<BranchName>.+)
-    source-branches:
-    - main
-    # - develop
-    - rc
-    # - hotfix
-    is-source-branch-for: []
-    is-main-branch: false
-
-  unknown2:
-    mode: ContinuousDelivery
-    label: 'dev'
-    increment: Inherit
-    prevent-increment:
-      when-current-commit-tagged: false
-    track-merge-message: true
-    regex: (?<BranchName>.+)
-    source-branches:
-    # - main
-    - develop
-    # - rc
-    # - hotfix
-    is-source-branch-for: []
-    is-main-branch: false
-   
-  hotfix:
-    label: 'hotfix'
+  main:
+    is-release-branch: true
+    source-branches: []
 
   rc:
-    regex: ^RC-4.[2-9]\d(.[\d]+)*$
     label: 'RC'
+    regex: ^RC-4.[2-9]\d(.[\d]+)*$
     increment: None
-    prevent-increment: 
-      of-merged-branch: true
     is-release-branch: true
-    tracks-release-branches: true
-    source-branches: ['develop']
-    is-source-branch-for: ['main', 'pull-request']
-    track-merge-target: true
+    source-branches: []
 
-  support:
-    label: ''
-    increment: Patch
-    prevent-increment:
-      of-merged-branch: true
-    track-merge-target: true
-    regex: ^support[/-](?<BranchName>.+)
+  feature:
+    label: 'dev'
+    regex: ^((?!RC.*|rc.*|develop.*|main.*|Release\-\d+\.\d+).+)$
     source-branches:
-    - main
-    is-source-branch-for: []
+      - develop
+      - main
+      - rc
     tracks-release-branches: false
-    is-release-branch: false
 
-tag-prefix: '(dev-)?'  # Remove any tag prefix
+tag-prefix: '(dev-)?'
 assembly-versioning-scheme: MajorMinorPatch
 assembly-file-versioning-scheme: MajorMinorPatch
 assembly-informational-format: '{SemVer}'
-ignore:
-  commits-before: '2024-06-01T12:00:00Z'
-increment: None
