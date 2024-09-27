@@ -23,47 +23,12 @@ branches:
 
   release:
     regex: ^$ # match nothing
-
-  feature:
-    regex: ^$ # match nothing
-
-  unknown:
-    mode: ContinuousDelivery
-    label: 'dev'
-    increment: Inherit
-    prevent-increment:
-      when-current-commit-tagged: false
-    track-merge-message: true
-    regex: (?<BranchName>.+)
-    source-branches:
-    - main
-    # - develop
-    - rc
-    # - hotfix
-    is-source-branch-for: []
-    is-main-branch: false
-
-  unknown2:
-    mode: ContinuousDelivery
-    label: 'dev'
-    increment: Inherit
-    prevent-increment:
-      when-current-commit-tagged: false
-    track-merge-message: true
-    regex: (?<BranchName>.+)
-    source-branches:
-    # - main
-    - develop
-    # - rc
-    # - hotfix
-    is-source-branch-for: []
-    is-main-branch: false
    
   hotfix:
     label: 'hotfix'
 
   rc:
-    regex: ^RC-4.[2-9]\d(.[\d]+)*$
+    regex: ^RC-.*$
     label: 'RC'
     increment: None
     prevent-increment: 
@@ -86,6 +51,22 @@ branches:
     is-source-branch-for: []
     tracks-release-branches: false
     is-release-branch: false
+
+  feature:
+    mode: ContinuousDelivery
+    label: 'dev'
+    increment: Inherit
+    prevent-increment:
+      when-current-commit-tagged: false
+    track-merge-message: true
+    regex: ^((?!.*RC.*|.*rc.*|.*develop.*|.*main.*|.*Release\-\d+\.\d+).+)$
+    source-branches:
+    - main
+    - develop
+    - rc
+    - hotfix
+    is-source-branch-for: []
+    is-main-branch: false
 
 tag-prefix: '(dev-)?'  # Remove any tag prefix
 assembly-versioning-scheme: MajorMinorPatch
